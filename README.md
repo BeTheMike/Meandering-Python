@@ -4,7 +4,7 @@ Trying to catch the development train while laying on the tracks.
 
 #### Some short descriptions on scripts:
 
-**IBlox-IP-Info.py**: Does an API lookup for a hostname or IP (or multiple if you want) against your Infoblox database.
+**IBlox-IP-Info.py**: Does an API lookup for a hostname or IP against your Infoblox database.
 It will give you all the subnet info for the IP as well as ny Network Attributes assigned to it as well as if there are one
 or multiple "A" records.
 
