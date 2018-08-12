@@ -17,3 +17,6 @@ that it found that string in and give you a chance to cancel out of the replace 
 Pretty specific script.  This will connect to a Juniper device (tested on QFX10k's), look for a specific IP and pull 
 back the IP/Mac info and let you know via LLDP what ToR switch that host is connected to.
 
+**ip-calc.py**:  Basic IP calculator to give you the IP info based on a CIDR range and mask (i.e. 10.3.3.3/26)
+
+**bgp-peers.py**:  Juniper equipment specific.  This will give you a basic menu and ask you what you want.  1.  Full peers.  2.  Partial (non-established peers) 3. Filtered (Only peers that have changed in the last 24 hours).
