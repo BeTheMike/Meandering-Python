@@ -9,7 +9,7 @@ import requests
 from termcolor import colored, cprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-# Disable that stupid HTTPS warning ... for now
+# Disable the HTTPS warning ... for now
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 def main(argv):
@@ -17,9 +17,9 @@ def main(argv):
     while True:
         try:
             # User Info
-            user = getpass.getuser()
+            user = getpass.getuser()  # Assumes your compuer login is the same as your InfoBlox login
             password = getpass.getpass("Enter Infoblox Password: ")
-            IBlox = 'Your InfoBlox Info Here'  ## Put your Infoblox name or IP here.
+            IBlox = 'Your InfoBlox Info Here'  ## Put your Infoblox DNS name or IP here.
 
             for x in argv[1:]:
                 whatIP = x

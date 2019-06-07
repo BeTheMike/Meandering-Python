@@ -19,4 +19,6 @@ back the IP/Mac info and let you know via LLDP what ToR switch that host is conn
 
 **ip-calc.py**:  Basic IP calculator to give you the IP info based on a CIDR range and mask (i.e. 10.3.3.3/26)
 
-**bgp-peers.py**:  Juniper equipment specific.  This will give you a basic menu and ask you what you want.  1.  Full peers.  2.  Partial (non-established peers) 3. Filtered (Only peers that have changed in the last 24 hours).
+**bgp-peers.py**:  Juniper equipment specific.  This will give you a basic menu and ask you what you want.  1.  Full peers.  2.  Partial (non-established peers) 3. Filtered (Only peers that have changed in the last 24 hours).  It then provides the status of BGP peers per routing-instance.
+
+**vcenter-cluster-info.py**:  Auth's against vCenter.  Put in any part of a name of your VM Cluster - it returns back the Cluster name, host's in the cluster as well as what VLAN tags are on the corresponding host's dvSwitch.
