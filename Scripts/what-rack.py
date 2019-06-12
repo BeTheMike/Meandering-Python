@@ -1,56 +1,60 @@
-from jnpr.junos import Device
-from jnpr.junos.op.arp import ArpTable
-from jnpr.junos.op.lldp import LLDPNeighborTable
 import re
 import sys
 import socket
 import getpass
+from lxml import etree
+import jxmlease
+from jnpr.junos import Device
 
-"""This script will take an IP, do a DNS lookup if necessary
-and with that IP, ID via the ARP table what interface the arp
-resides on to quickly ID what ToR it's connected to in the DC."""
+"""This script will take an IP, log into a given switch, and give you the active VTEP it's 
+source from.  It ouputs:
 
-whatIP = sys.argv[1]
+[A Record of the IP] - [IP address you searched for]
+[MAC address of the server or device] - [VTEP It's currently source from]
 
-#Sets a test to make sure it looks like an IP.  Yes, non IP values could match
-#but this works well for what I need it for.
-pat = re.compile("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
-testIP = pat.match(whatIP)
+It assumes that your spine/leaf are your VTEPs and does rely heavily on DNS for usable info """
 
-if testIP:
-    findIP = whatIP #If it matches IP format, just carry on and set the variable.
-else:
-    findIP = socket.gethostbyname(whatIP) #If it's anything else, try and do a DNS lookup on it.
-    print ('Looking for IP: '+ findIP)
+def rev_dns(ip_address): # Does a reverse lookup on an IP
+    try:
+        return socket.gethostbyaddr(ip_address)[0]
+    except:
+        return ip_address
 
-# Log into the switch
-hostname = input("Switch IP: ")
-username = input("Username: ")
-password = getpass.getpass("Password: ")
-dev = Device(host=hostname, user=username, passwd=password)
-dev.open()
+def ip_lookup(user_input): # Forward lookup on an IP.  Tries to resolve the DNS name if available.
+    pat = re.compile("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
+    lookup_ip = pat.match(user_input)
+    if lookup_ip:
+        #print('Looking up: ', rev_dns((lookup_ip)))
+        return user_input
+    else:
+        try:
+            lookup_ip = socket.gethostbyname(user_input)
+            #print("Looking for: ", user_input, "IP - ", lookup_ip)
+            return lookup_ip
+        except socket.gaierror:
+            print("")
+            print("No DNS Entry exists for that host - exiting script")
+            print("")
+            sys.exit()
 
-# Get ARP Info
-arp = ArpTable(dev)
-arp.get()
-arp_list = arp.values()
+def do_search(): # Performing the actual EVPN lookup.
+    for device in evpn_parsed['evpn-database-information']['evpn-database-instance']['mac-entry']:
+        if device.get('ip-address') == whatIP:
+            print("{:<15} - {:<40}".format(rev_dns(device.get('ip-address')), device.get('ip-address')))
+            print("Mac: {:<15} - ToR: {:<40}\n".format(device.get('mac-address'), rev_dns(device.get('active-source'))))
 
-# Get LLDP Info
-lldp = LLDPNeighborTable(dev)
-lldp.get()
-lldp_list = lldp.values()
+# Login info for the switch
+switch_ip = input("Switch IP: ")
+switch_user = input("Username: ")
+switch_pass = getpass.getpass("Password: ")
 
-key = findIP
+for x in sys.argv[1:]:
+    whatIP = ip_lookup(x)
+    try:
+        with Device(host=switch_ip, user=switch_user, password=switch_pass, timeout=300) as dev:
+            evpn = dev.rpc.get_evpn_database_information()
+            evpn_parsed = jxmlease.parse(etree.tostring(evpn, encoding='unicode'))
+            do_search()
+    except Exception as e:
+        print(e)
 
-for mac, ip, interface in arp_list:
-    if key in ip:
-        for clean in interface:
-            int_clean = re.search(r'ae[0-9]{1,2}', str(clean))
-            if int_clean:
-                ae_int = int_clean.group(0)
-                for local_int, local_parent, remote_type, remote_chassis, remote_desc, remote_id, remote_sysname in lldp_list:
-                    if ae_int in local_parent:
-                        print("IP = {}, Mac = {}, Rack = {}".format(str(findIP), mac[1], remote_sysname[1]))
-                        print("")
-
-dev.close()

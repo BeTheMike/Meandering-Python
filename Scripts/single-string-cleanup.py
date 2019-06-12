@@ -12,7 +12,7 @@ def findReplace(files, find, replace, filePattern):
     :param filePattern: Again, just a simple text file
     :return:
     """
-    print("Ok - lets clean them up...")
+    print("Ok - lets clean them up...\n")
     for files in fileList:
         with open(files) as f:
             s = f.read()
@@ -32,7 +32,7 @@ def yes_no_cont(answer):
         else:
             print("Try again.")
 
-findWHERE = input("Enter the directory tree (ie. /foo/bar/place): ")
+findWHERE = input("Enter the directory tree (ie. /your/folder/here): ")
 findME = getpass.getpass('Enter what you want to clean up: ')
 
 # Default replacement string.  Adjust as necessary

@@ -1,5 +1,5 @@
 # Meandering-Python
-Trying to catch the development train while laying on the tracks.
+Trying to catch the dev/automation/scripting train while laying on the tracks.
 
 
 #### Some short descriptions on scripts:
@@ -13,9 +13,8 @@ This will iterate through a directory structure (just text files) looking for wh
 with whatever you want it replaced with.  It will prompt you for the directory.  It will then give you a list of directories
 that it found that string in and give you a chance to cancel out of the replace in case something doesn't look right.
 
-**what-rack.py** | _Needs Updates_ |
-Pretty specific script.  This will connect to a Juniper device (tested on QFX10k's), look for a specific IP and pull 
-back the IP/Mac info and let you know via LLDP what ToR switch that host is connected to.
+**what-rack.py** 
+Pretty specific script.  This will connect to a Juniper device, look for a specific IP and pull the current VTEP that is being routed from. 
 
 **ip-calc.py**:  Basic IP calculator to give you the IP info based on a CIDR range and mask (i.e. 10.3.3.3/26)
 
