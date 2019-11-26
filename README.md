@@ -4,6 +4,8 @@ Trying to catch the dev/automation/scripting train while laying on the tracks.
 
 #### Some short descriptions on scripts:
 
+**dhcp-usage.py**: Quick little script that will scour DHCP ranges and kick back any range that is reported above 60% utilization.
+
 **IBlox-IP-Info.py**: Does an API lookup for a hostname or IP against your Infoblox database.
 It will give you all the subnet info for the IP as well as ny Network Attributes assigned to it as well as if there are one
 or multiple "A" records.
