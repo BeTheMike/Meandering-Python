@@ -4,6 +4,8 @@ Trying to catch the dev/automation/scripting train while laying on the tracks.
 
 #### Some short descriptions on scripts:
 
+**juniper-device-backup.py**: Will log into _n_ number of devices and pull down the RSI, /var/log and the config in set.  Just use multiple IPs or DNS names after you call it (i.e. juniper-device-backup.py x.x.x.x y.y.y.y z.z.z.z).  You'll need to adjust login info as well as the location where you want the file stored.
+
 **dhcp-usage.py**: Quick little script that will scour DHCP ranges and kick back any range that is reported above 60% utilization.
 
 **IBlox-IP-Info.py**: Does an API lookup for a hostname or IP against your Infoblox database.
